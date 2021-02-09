@@ -1086,11 +1086,8 @@ namespace UnityEngine.Rendering.HighDefinition
                     motionVectors = upsamplignSceneResults.motionVectors;
                 }
 
-
                 source = CustomPostProcessPass(renderGraph, hdCamera, source, depthBuffer, normalBuffer, HDRenderPipeline.defaultAsset.beforeTAACustomPostProcesses, HDProfileId.CustomPostProcessBeforeTAA);
 
-/*
-                //TODO: go over each post process and ensure correct resolution is used.
                 // Temporal anti-aliasing goes first
                 if (m_AntialiasingFS)
                 {
@@ -1104,6 +1101,7 @@ namespace UnityEngine.Rendering.HighDefinition
                     }
                 }
 
+/*
                 source = CustomPostProcessPass(renderGraph, hdCamera, source, depthBuffer, normalBuffer, HDRenderPipeline.defaultAsset.beforePostProcessCustomPostProcesses, HDProfileId.CustomPostProcessBeforePP);
 
                 source = DepthOfFieldPass(renderGraph, hdCamera, depthBuffer, motionVectors, depthBufferMipChain, source);
