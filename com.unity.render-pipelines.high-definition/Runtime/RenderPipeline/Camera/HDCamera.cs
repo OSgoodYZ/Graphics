@@ -236,7 +236,7 @@ namespace UnityEngine.Rendering.HighDefinition
             }
         }
 
-        internal ResolutionGroup   ActiveResolutionGroup { set { m_ActiveResolutionGroup = value; } }
+        internal ResolutionGroup   ActiveResolutionGroup { set { m_ActiveResolutionGroup = value; } get { return m_ActiveResolutionGroup; } }
         private  ResolutionGroup   m_ActiveResolutionGroup = ResolutionGroup.Full;
         internal ResolutionInfo[]  m_ResolutionInfos = new ResolutionInfo[(int)ResolutionGroup.Count];
 
@@ -619,7 +619,6 @@ namespace UnityEngine.Rendering.HighDefinition
             if (isMainGameView)
             {
                 scaledViewport = DynamicResolutionHandler.instance.GetScaledSize(nonScaledViewport);
-                ActiveResolutionGroup = ResolutionGroup.Downsampled;
             }
 
             m_ResolutionInfos[(int)ResolutionGroup.Downsampled] = new ResolutionInfo(scaledViewport);
@@ -637,6 +636,7 @@ namespace UnityEngine.Rendering.HighDefinition
 
             HDRenderPipeline.UpdateVolumetricBufferParams(this);
             HDRenderPipeline.ResizeVolumetricHistoryBuffers(this);
+            ActiveResolutionGroup = ResolutionGroup.Downsampled;
         }
 
         /// <summary>Set the RTHandle scale to the actual camera size (can be scaled)</summary>
