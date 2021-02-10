@@ -1102,6 +1102,7 @@ namespace UnityEngine.Rendering.HighDefinition
                 }
 
 /*
+                //TODO: go over each post process and ensure correct resolution is used.
                 source = CustomPostProcessPass(renderGraph, hdCamera, source, depthBuffer, normalBuffer, HDRenderPipeline.defaultAsset.beforePostProcessCustomPostProcesses, HDProfileId.CustomPostProcessBeforePP);
 
                 source = DepthOfFieldPass(renderGraph, hdCamera, depthBuffer, motionVectors, depthBufferMipChain, source);
