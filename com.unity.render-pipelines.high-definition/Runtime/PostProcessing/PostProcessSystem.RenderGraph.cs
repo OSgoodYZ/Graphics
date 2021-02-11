@@ -173,12 +173,12 @@ namespace UnityEngine.Rendering.HighDefinition
                 useMipMap = false,
                 enableRandomWrite = true
             });
-       }
+        }
 
-       TextureHandle GetPostprocessUpsampledOutputHandle(RenderGraph renderGraph, string name)
-       {
+        TextureHandle GetPostprocessUpsampledOutputHandle(RenderGraph renderGraph, string name)
+        {
             return GetPostprocessOutputHandle(renderGraph, name, false);
-       }
+        }
 
         void FillBloomMipsTextureHandles(BloomData bloomData, RenderGraph renderGraph, RenderGraphBuilder builder)
         {
