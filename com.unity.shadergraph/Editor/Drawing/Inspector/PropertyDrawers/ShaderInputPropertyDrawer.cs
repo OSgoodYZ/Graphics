@@ -1218,7 +1218,7 @@ namespace UnityEditor.ShaderGraph.Drawing.Inspector.PropertyDrawers
                 if (EditorGUI.EndChangeCheck())
                 {
                     // Don't allow empty or whitespace display names, this will break the enum list in shaderlab since it's whitespace delimited
-                    if(!string.IsNullOrWhiteSpace(displayName))
+                    if (!string.IsNullOrWhiteSpace(displayName))
                         keyword.entries[index] = new KeywordEntry(index + 1, displayName, referenceName);
 
                     // Rebuild();
