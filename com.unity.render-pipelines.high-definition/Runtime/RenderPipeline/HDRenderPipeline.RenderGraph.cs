@@ -35,7 +35,7 @@ namespace UnityEngine.Rendering.HighDefinition
 
             m_RenderGraph.Begin(renderGraphParams);
             
-            UpdateCameraSize(m_RenderGraph, hdCamera);
+            InitializeCameraSize(m_RenderGraph, hdCamera);
 
             // We need to initalize the MipChainInfo here, so it will be available to any render graph pass that wants to use it during setup
             m_DepthBufferMipChainInfo.ComputePackedMipChainInfo(new Vector2Int(hdCamera.actualWidth, hdCamera.actualHeight));
@@ -1537,6 +1537,10 @@ namespace UnityEngine.Rendering.HighDefinition
 
         void SetCameraRenderResolutionGroup(RenderGraph renderGraph, HDCamera hdCamera, HDCamera.ResolutionGroup resolutionGroup, bool force = false)
         {
+            //The camera does not need to reset resolution group since this feature is disabled
+            if (!DynamicResolutionHandler.instance.DynamicResolutionEnabled())
+                return;
+
             //camera is already on this resolution group, nothing to do.
             if (resolutionGroup == hdCamera.ActiveResolutionGroup && !force)
                 return;
@@ -1560,9 +1564,9 @@ namespace UnityEngine.Rendering.HighDefinition
             }
         }
 
-        void UpdateCameraSize(RenderGraph renderGraph, hdCamera)
+        void InitializeCameraSize(RenderGraph renderGraph, HDCamera hdCamera)
         {
-            SetCameraRenderResolutionGroup(renderGraph, hdCamera, HDCamera.ActiveResolutionGroup, true);
+            SetCameraRenderResolutionGroup(renderGraph, hdCamera, hdCamera.ActiveResolutionGroup, true);
         } 
 
         void ResetCameraSizeForAfterPostProcess(RenderGraph renderGraph, HDCamera hdCamera)

@@ -636,7 +636,7 @@ namespace UnityEngine.Rendering.HighDefinition
 
             HDRenderPipeline.UpdateVolumetricBufferParams(this);
             HDRenderPipeline.ResizeVolumetricHistoryBuffers(this);
-            ActiveResolutionGroup = ResolutionGroup.Downsampled;
+            ActiveResolutionGroup = DynamicResolutionHandler.instance.DynamicResolutionEnabled() ? ResolutionGroup.Downsampled : ResolutionGroup.Full;
         }
 
         /// <summary>Set the RTHandle scale to the actual camera size (can be scaled)</summary>
