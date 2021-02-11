@@ -292,9 +292,20 @@ namespace UnityEditor.ShaderGraph
             return DeduplicateName(existingNames, duplicateFormat, name);
         }
 
-        internal static string DeduplicateName(IEnumerable<string> existingNames, string duplicateFormat, string name)
+        internal static string SanitizeNameCaseInsensitive(IEnumerable<string> existingNames, string duplicateFormat, string name, string disallowedPatternRegex = "\"")
         {
-            if (!existingNames.Contains(name))
+            name = Regex.Replace(name, disallowedPatternRegex, "_");
+            return DeduplicateName(existingNames, duplicateFormat, name, StringComparer.OrdinalIgnoreCase);
+        }
+
+        internal static string DeduplicateName(IEnumerable<string> existingNames, string duplicateFormat, string name, bool caseSensitive = true)
+        {
+            return DeduplicateName(existingNames, duplicateFormat, name, StringComparer.Ordinal);
+        }
+
+        internal static string DeduplicateName(IEnumerable<string> existingNames, string duplicateFormat, string name, StringComparer comparer)
+        {
+            if (!existingNames.Contains(name, comparer))
                 return name;
 
             string escapedDuplicateFormat = Regex.Escape(duplicateFormat);
