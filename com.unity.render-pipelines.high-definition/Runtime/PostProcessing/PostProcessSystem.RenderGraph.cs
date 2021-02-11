@@ -1084,6 +1084,8 @@ namespace UnityEngine.Rendering.HighDefinition
                     source = upsamplignSceneResults.color;
                     depthBuffer = upsamplignSceneResults.depthBuffer;
                     motionVectors = upsamplignSceneResults.motionVectors;
+                    
+                    m_HDInstance.SetCameraRenderResolutionGroup(renderGraph, hdCamera, HDCamera.ResolutionGroup.Full);
                 }
 
                 source = CustomPostProcessPass(renderGraph, hdCamera, source, depthBuffer, normalBuffer, HDRenderPipeline.defaultAsset.beforeTAACustomPostProcesses, HDProfileId.CustomPostProcessBeforeTAA);

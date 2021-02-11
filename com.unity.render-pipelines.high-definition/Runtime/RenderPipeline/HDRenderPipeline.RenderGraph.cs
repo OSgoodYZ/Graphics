@@ -1535,7 +1535,7 @@ namespace UnityEngine.Rendering.HighDefinition
             public ShaderVariablesGlobal shaderVariablesGlobal;
         }
 
-        void SetCameraRenderResolutionGroup(RenderGraph renderGraph, HDCamera hdCamera, HDCamera.ResolutionGroup resolutionGroup, bool force = false)
+        internal void SetCameraRenderResolutionGroup(RenderGraph renderGraph, HDCamera hdCamera, HDCamera.ResolutionGroup resolutionGroup, bool force = false)
         {
             //The camera does not need to reset resolution group since this feature is disabled
             if (!DynamicResolutionHandler.instance.DynamicResolutionEnabled())
