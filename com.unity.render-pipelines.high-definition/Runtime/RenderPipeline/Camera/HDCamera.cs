@@ -69,12 +69,7 @@ namespace UnityEngine.Rendering.HighDefinition
         /// Screen resolution information.
         /// Width, height, inverse width, inverse height.
         /// </summary>
-        public Vector4              screenSize
-        {
-            set { m_ResolutionInfos[(int)m_ActiveResolutionGroup].screenSize = value; }
-            get { return m_ResolutionInfos[(int)m_ActiveResolutionGroup].screenSize; }
-        }
-
+        public Vector4              screenSize;
         /// <summary>Camera frustum.</summary>
         public Frustum              frustum;
         /// <summary>Camera component.</summary>
@@ -91,17 +86,9 @@ namespace UnityEngine.Rendering.HighDefinition
         internal int                volumetricValidFrames = 0;
 
         /// <summary>Width actually used for rendering after dynamic resolution and XR is applied.</summary>
-        public int                  actualWidth
-        {
-            get { return m_ResolutionInfos[(int)m_ActiveResolutionGroup].viewport.x; }
-        }
-
+        public int                  actualWidth { get; private set; }
         /// <summary>Height actually used for rendering after dynamic resolution and XR is applied.</summary>
-        public int                  actualHeight
-        {
-            get { return m_ResolutionInfos[(int)m_ActiveResolutionGroup].viewport.y; }
-        }
-
+        public int                  actualHeight { get; private set; }
         /// <summary>Number of MSAA samples used for this frame.</summary>
         public MSAASamples          msaaSamples { get; private set; }
         /// <summary>Frame settings for this camera.</summary>
@@ -146,7 +133,6 @@ namespace UnityEngine.Rendering.HighDefinition
             volumetricHistoryIsValid = false;
             volumetricValidFrames = 0;
             colorPyramidHistoryIsValid = false;
-            ActiveResolutionGroup = ResolutionGroup.Full;
         }
 
         /// <summary>
@@ -213,33 +199,6 @@ namespace UnityEngine.Rendering.HighDefinition
             public bool rayTraced;
         }
 
-        internal enum ResolutionGroup
-        {
-            Downsampled,
-            Full,
-            Count
-        }
-
-        internal struct ResolutionInfo
-        {
-            public Vector2Int viewport;
-            public Vector4 screenSize;
-            public Vector4 screenParams;
-
-            public ResolutionInfo(Vector2Int inViewport)
-            {
-                viewport = inViewport;
-                float width = viewport.x;
-                float height = viewport.y;
-                screenSize = new Vector4(width, height, 1.0f / width, 1.0f / height);
-                screenParams = new Vector4(screenSize.x, screenSize.y, 1.0f + screenSize.z, 1.0f + screenSize.w);
-            }
-        }
-
-        internal ResolutionGroup   ActiveResolutionGroup { set { m_ActiveResolutionGroup = value; } get { return m_ActiveResolutionGroup; } }
-        private  ResolutionGroup   m_ActiveResolutionGroup = ResolutionGroup.Full;
-        internal ResolutionInfo[]  m_ResolutionInfos = new ResolutionInfo[(int)ResolutionGroup.Count];
-
         internal Vector4[]              frustumPlaneEquations;
         internal int                    taaFrameIndex;
         internal float                  taaSharpenStrength;
@@ -251,12 +210,7 @@ namespace UnityEngine.Rendering.HighDefinition
         internal Vector4                zBufferParams;
         internal Vector4                unity_OrthoParams;
         internal Vector4                projectionParams;
-        internal Vector4                screenParams
-        {
-            set { m_ResolutionInfos[(int)m_ActiveResolutionGroup].screenParams = value; }
-            get { return m_ResolutionInfos[(int)m_ActiveResolutionGroup].screenParams; }
-        }
-
+        internal Vector4                screenParams;
         internal int                    volumeLayerMask;
         internal Transform              volumeAnchor;
         internal Rect                   finalViewport; // This will have the correct viewport position and the size will be full resolution (ie : not taking dynamic rez into account)
@@ -610,21 +564,28 @@ namespace UnityEngine.Rendering.HighDefinition
                 {
                     finalViewport = GetPixelRect();
                 }
+
+                actualWidth = Math.Max((int)finalViewport.size.x, 1);
+                actualHeight = Math.Max((int)finalViewport.size.y, 1);
             }
 
             DynamicResolutionHandler.instance.finalViewport = new Vector2Int((int)finalViewport.width, (int)finalViewport.height);
 
-            Vector2Int nonScaledViewport = new Vector2Int(Math.Max((int)finalViewport.size.x, 1), Math.Max((int)finalViewport.size.y, 1));
-            Vector2Int scaledViewport = nonScaledViewport;
+            Vector2Int nonScaledViewport = new Vector2Int(actualWidth, actualHeight);
             if (isMainGameView)
             {
-                scaledViewport = DynamicResolutionHandler.instance.GetScaledSize(nonScaledViewport);
+                Vector2Int scaledSize = DynamicResolutionHandler.instance.GetScaledSize(new Vector2Int(actualWidth, actualHeight));
+                actualWidth = scaledSize.x;
+                actualHeight = scaledSize.y;
             }
 
-            m_ResolutionInfos[(int)ResolutionGroup.Downsampled] = new ResolutionInfo(scaledViewport);
-            m_ResolutionInfos[(int)ResolutionGroup.Full] = new ResolutionInfo(nonScaledViewport);
+            var screenWidth = actualWidth;
+            var screenHeight = actualHeight;
 
             msaaSamples = newMSAASamples;
+
+            screenSize = new Vector4(screenWidth, screenHeight, 1.0f / screenWidth, 1.0f / screenHeight);
+            screenParams = new Vector4(screenSize.x, screenSize.y, 1 + screenSize.z, 1 + screenSize.w);
 
             const int kMaxSampleCount = 8;
             if (++taaFrameIndex >= kMaxSampleCount)
@@ -636,7 +597,6 @@ namespace UnityEngine.Rendering.HighDefinition
 
             HDRenderPipeline.UpdateVolumetricBufferParams(this);
             HDRenderPipeline.ResizeVolumetricHistoryBuffers(this);
-            ActiveResolutionGroup = DynamicResolutionHandler.instance.DynamicResolutionEnabled() ? ResolutionGroup.Downsampled : ResolutionGroup.Full;
         }
 
         /// <summary>Set the RTHandle scale to the actual camera size (can be scaled)</summary>
@@ -736,22 +696,12 @@ namespace UnityEngine.Rendering.HighDefinition
 
         unsafe internal void UpdateShaderVariablesGlobalCB(ref ShaderVariablesGlobal cb)
             => UpdateShaderVariablesGlobalCB(ref cb, (int)cameraFrameCount);
-        
-        unsafe internal void UpdateScreenResolutionParametersCB(ref ShaderVariablesGlobal cb)
-        {
-            cb._ScreenSize = screenSize;
-            cb._RTHandleScale = RTHandles.rtHandleProperties.rtHandleScale;
-            cb._RTHandleScaleHistory = m_HistoryRTSystem.rtHandleProperties.rtHandleScale;
-            cb._ScreenParams = screenParams;
-        }
 
         unsafe internal void UpdateShaderVariablesGlobalCB(ref ShaderVariablesGlobal cb, int frameCount)
         {
             bool taaEnabled = frameSettings.IsEnabled(FrameSettingsField.Postprocess)
                 && antialiasing == AntialiasingMode.TemporalAntialiasing
                 && camera.cameraType == CameraType.Game;
-
-            UpdateScreenResolutionParametersCB(ref cb);
 
             cb._ViewMatrix = mainViewConstants.viewMatrix;
             cb._CameraViewMatrix = mainViewConstants.viewMatrix;
@@ -766,9 +716,13 @@ namespace UnityEngine.Rendering.HighDefinition
             cb._PrevInvViewProjMatrix = mainViewConstants.prevInvViewProjMatrix;
             cb._WorldSpaceCameraPos_Internal = mainViewConstants.worldSpaceCameraPos;
             cb._PrevCamPosRWS_Internal = mainViewConstants.prevWorldSpaceCameraPos;
+            cb._ScreenSize = screenSize;
+            cb._RTHandleScale = RTHandles.rtHandleProperties.rtHandleScale;
+            cb._RTHandleScaleHistory = m_HistoryRTSystem.rtHandleProperties.rtHandleScale;
             cb._ZBufferParams = zBufferParams;
             cb._ProjectionParams = projectionParams;
             cb.unity_OrthoParams = unity_OrthoParams;
+            cb._ScreenParams = screenParams;
             for (int i = 0; i < 6; ++i)
                 for (int j = 0; j < 4; ++j)
                     cb._FrustumPlanes[i * 4 + j] = frustumPlaneEquations[i][j];

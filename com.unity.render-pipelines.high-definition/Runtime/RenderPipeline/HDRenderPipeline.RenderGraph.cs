@@ -34,8 +34,6 @@ namespace UnityEngine.Rendering.HighDefinition
             };
 
             m_RenderGraph.Begin(renderGraphParams);
-            
-            InitializeCameraSize(m_RenderGraph, hdCamera);
 
             // We need to initalize the MipChainInfo here, so it will be available to any render graph pass that wants to use it during setup
             m_DepthBufferMipChainInfo.ComputePackedMipChainInfo(new Vector2Int(hdCamera.actualWidth, hdCamera.actualHeight));
@@ -240,7 +238,7 @@ namespace UnityEngine.Rendering.HighDefinition
             }
             PushFullScreenExposureDebugTexture(m_RenderGraph, postProcessDest);
 
-            ResetCameraSizeForAfterPostProcess(m_RenderGraph, hdCamera);
+            ResetCameraSizeForAfterPostProcess(m_RenderGraph, hdCamera, commandBuffer);
 
             RenderCustomPass(m_RenderGraph, hdCamera, postProcessDest, prepassOutput, customPassCullingResults, cullingResults, CustomPassInjectionPoint.AfterPostProcess, aovRequest, aovCustomPassBuffers);
 
@@ -1528,50 +1526,32 @@ namespace UnityEngine.Rendering.HighDefinition
             return executed;
         }
 
-        class SetCameraRenderResolutionGroupPassData
+        class ResetCameraSizeForAfterPostProcessPassData
         {
             public HDCamera hdCamera;
-            public HDCamera.ResolutionGroup resolutionGroup;
             public ShaderVariablesGlobal shaderVariablesGlobal;
         }
 
-        internal void SetCameraRenderResolutionGroup(RenderGraph renderGraph, HDCamera hdCamera, HDCamera.ResolutionGroup resolutionGroup, bool force = false)
+        void ResetCameraSizeForAfterPostProcess(RenderGraph renderGraph, HDCamera hdCamera, CommandBuffer commandBuffer)
         {
-            //The camera does not need to reset resolution group since this feature is disabled
-            if (!DynamicResolutionHandler.instance.DynamicResolutionEnabled())
-                return;
-
-            //camera is already on this resolution group, nothing to do.
-            if (resolutionGroup == hdCamera.ActiveResolutionGroup && !force)
-                return;
-
-            using (var builder = renderGraph.AddRenderPass("Set Camera Resolution Group", out SetCameraRenderResolutionGroupPassData passData))
+            if (DynamicResolutionHandler.instance.DynamicResolutionEnabled())
             {
-                passData.hdCamera = hdCamera;
-                passData.resolutionGroup = resolutionGroup;
-                passData.shaderVariablesGlobal = m_ShaderVariablesGlobalCB;
-                hdCamera.ActiveResolutionGroup = resolutionGroup;
-                builder.AllowPassCulling(false);
+                using (var builder = renderGraph.AddRenderPass("Reset Camera Size After Post Process", out ResetCameraSizeForAfterPostProcessPassData passData))
+                {
+                    passData.hdCamera = hdCamera;
+                    passData.shaderVariablesGlobal = m_ShaderVariablesGlobalCB;
+                    builder.AllowPassCulling(false);
 
-                builder.SetRenderFunc(
-                    (SetCameraRenderResolutionGroupPassData data, RenderGraphContext ctx) =>
-                    {
-                        data.hdCamera.ActiveResolutionGroup = resolutionGroup;
-                        RTHandles.SetReferenceSize((int)data.hdCamera.actualWidth, (int)data.hdCamera.actualHeight, data.hdCamera.msaaSamples);
-                        data.hdCamera.UpdateScreenResolutionParametersCB(ref data.shaderVariablesGlobal);
-                        ConstantBuffer.PushGlobal(ctx.cmd, data.shaderVariablesGlobal, HDShaderIDs._ShaderVariablesGlobal);
-                    });
+                    builder.SetRenderFunc(
+                        (ResetCameraSizeForAfterPostProcessPassData data, RenderGraphContext ctx) =>
+                        {
+                            data.shaderVariablesGlobal._ScreenSize = new Vector4(data.hdCamera.finalViewport.width, data.hdCamera.finalViewport.height, 1.0f / data.hdCamera.finalViewport.width, 1.0f / data.hdCamera.finalViewport.height);
+                            data.shaderVariablesGlobal._RTHandleScale = RTHandles.rtHandleProperties.rtHandleScale;
+                            ConstantBuffer.PushGlobal(ctx.cmd, data.shaderVariablesGlobal, HDShaderIDs._ShaderVariablesGlobal);
+                            RTHandles.SetReferenceSize((int)data.hdCamera.finalViewport.width, (int)data.hdCamera.finalViewport.height, data.hdCamera.msaaSamples);
+                        });
+                }
             }
-        }
-
-        void InitializeCameraSize(RenderGraph renderGraph, HDCamera hdCamera)
-        {
-            SetCameraRenderResolutionGroup(renderGraph, hdCamera, hdCamera.ActiveResolutionGroup, true);
-        } 
-
-        void ResetCameraSizeForAfterPostProcess(RenderGraph renderGraph, HDCamera hdCamera)
-        {
-            SetCameraRenderResolutionGroup(renderGraph, hdCamera, HDCamera.ResolutionGroup.Full);
         }
 
         class BindCustomPassBuffersPassData
