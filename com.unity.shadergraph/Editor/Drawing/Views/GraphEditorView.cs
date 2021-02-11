@@ -339,7 +339,7 @@ namespace UnityEditor.ShaderGraph.Drawing
                 m_SearchWindowProvider.connectedPort = null;
                 m_SearchWindowProvider.target = c.target;
                 var displayPosition = (c.screenMousePosition - m_EditorWindow.position.position);
-                // TODO: Weirdness with spawn positions towards bottom of SG window, causes offset upwards
+
                 SearcherWindow.Show(m_EditorWindow, (m_SearchWindowProvider as SearcherProvider).LoadSearchWindow(),
                     item => (m_SearchWindowProvider as SearcherProvider).OnSearcherSelectEntry(item, c.screenMousePosition - m_EditorWindow.position.position),
                     displayPosition, null, new SearcherWindow.Alignment(SearcherWindow.Alignment.Vertical.Center, SearcherWindow.Alignment.Horizontal.Left));
