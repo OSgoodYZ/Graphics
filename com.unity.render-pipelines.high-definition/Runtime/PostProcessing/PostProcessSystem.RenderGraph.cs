@@ -164,10 +164,9 @@ namespace UnityEngine.Rendering.HighDefinition
             public CustomPostProcessVolumeComponent customPostProcess;
         }
 
-        TextureHandle GetPostprocessOutputHandle(TextureHandle previousTexture, RenderGraph renderGraph, string name)
+        TextureHandle GetPostprocessOutputHandle(RenderGraph renderGraph,  string name, bool dynamicResolution = true)
         {
-            var prevTextureDesc = renderGraph.GetTextureDesc(previousTexture);
-            return renderGraph.CreateTexture(new TextureDesc(Vector2.one, prevTextureDesc.useDynamicScale, true)
+            return renderGraph.CreateTexture(new TextureDesc(Vector2.one, dynamicResolution, true)
             {
                 name = name,
                 colorFormat = m_ColorFormat,
@@ -178,14 +177,7 @@ namespace UnityEngine.Rendering.HighDefinition
 
        TextureHandle GetPostprocessUpsampledOutputHandle(RenderGraph renderGraph, string name)
        {
-            const bool enableDrs = false;
-            return renderGraph.CreateTexture(new TextureDesc(Vector2.one, enableDrs, true)
-            {
-                name = name,
-                colorFormat = m_ColorFormat,
-                useMipMap = false,
-                enableRandomWrite = true
-            });
+            return GetPostprocessOutputHandle(renderGraph, name, false);
        }
 
         void FillBloomMipsTextureHandles(BloomData bloomData, RenderGraph renderGraph, RenderGraphBuilder builder)
@@ -257,7 +249,7 @@ namespace UnityEngine.Rendering.HighDefinition
                 {
                     passData.source = builder.ReadTexture(source);
                     passData.parameters = PrepareStopNaNParameters(hdCamera);
-                    TextureHandle dest = GetPostprocessOutputHandle(source, renderGraph, "Stop NaNs Destination");
+                    TextureHandle dest = GetPostprocessOutputHandle(renderGraph, "Stop NaNs Destination");
                     passData.destination = builder.WriteTexture(dest);;
 
                     builder.SetRenderFunc(
@@ -332,7 +324,7 @@ namespace UnityEngine.Rendering.HighDefinition
                         passData.parameters = PrepareApplyExposureParameters(hdCamera);
                         passData.prevExposure = builder.ReadTexture(renderGraph.ImportTexture(GetPreviousExposureTexture(hdCamera)));
 
-                        TextureHandle dest = GetPostprocessOutputHandle(source, renderGraph, "Apply Exposure Destination");
+                        TextureHandle dest = GetPostprocessOutputHandle(renderGraph, "Apply Exposure Destination");
                         passData.destination = builder.WriteTexture(dest);
 
                         builder.SetRenderFunc(
@@ -370,7 +362,7 @@ namespace UnityEngine.Rendering.HighDefinition
                 passData.prevMVLen = builder.ReadTexture(renderGraph.ImportTexture(prevMVLen));
                 passData.nextMVLen = builder.WriteTexture(renderGraph.ImportTexture(nextMVLen));
 
-                TextureHandle dest = GetPostprocessOutputHandle(source, renderGraph, "TAA Destination");
+                TextureHandle dest = GetPostprocessOutputHandle(renderGraph, "TAA Destination");
                 passData.destination = builder.WriteTexture(dest);;
 
                 builder.SetRenderFunc(
@@ -406,7 +398,7 @@ namespace UnityEngine.Rendering.HighDefinition
                 passData.smaaBlendTex = builder.CreateTransientTexture(new TextureDesc(Vector2.one, true, true)
                     { colorFormat = GraphicsFormat.R8G8B8A8_UNorm, enableRandomWrite = true, name = "SMAA Blend Texture" });
 
-                TextureHandle dest = GetPostprocessOutputHandle(source, renderGraph, "SMAA Destination");
+                TextureHandle dest = GetPostprocessOutputHandle(renderGraph, "SMAA Destination");
                 passData.destination = builder.WriteTexture(dest);;
 
                 builder.SetRenderFunc(
@@ -466,7 +458,7 @@ namespace UnityEngine.Rendering.HighDefinition
                     float scale = 1f / (float)passData.parameters.resolution;
                     var screenScale = new Vector2(scale, scale);
 
-                    TextureHandle dest = GetPostprocessOutputHandle(source, renderGraph, "DoF Destination");
+                    TextureHandle dest = GetPostprocessOutputHandle(renderGraph, "DoF Destination");
                     passData.destination = builder.WriteTexture(dest);
                     passData.motionVecTexture = builder.ReadTexture(motionVectors);
                     passData.taaEnabled = taaEnabled;
@@ -613,7 +605,7 @@ namespace UnityEngine.Rendering.HighDefinition
                     passData.prevMVLen = TextureHandle.nullHandle;
                     passData.nextMVLen = TextureHandle.nullHandle;
 
-                    TextureHandle dest = GetPostprocessOutputHandle(source, renderGraph, "Post-DoF TAA Destination");
+                    TextureHandle dest = GetPostprocessOutputHandle(renderGraph, "Post-DoF TAA Destination");
                     passData.destination = builder.WriteTexture(dest);
 
                     builder.SetRenderFunc(
@@ -687,7 +679,7 @@ namespace UnityEngine.Rendering.HighDefinition
                             { colorFormat = GraphicsFormat.R16_SFloat, enableRandomWrite = true, name = "Tile to Scatter Min" });
                     }
 
-                    TextureHandle dest = GetPostprocessOutputHandle(source, renderGraph, "Motion Blur Destination");
+                    TextureHandle dest = GetPostprocessOutputHandle(renderGraph, "Motion Blur Destination");
                     passData.destination = builder.WriteTexture(dest);
 
                     builder.SetRenderFunc(
@@ -720,7 +712,7 @@ namespace UnityEngine.Rendering.HighDefinition
                 {
                     passData.source = builder.ReadTexture(source);
                     passData.parameters = PreparePaniniProjectionParameters(hdCamera);
-                    TextureHandle dest = GetPostprocessOutputHandle(source, renderGraph, "Panini Projection Destination");
+                    TextureHandle dest = GetPostprocessOutputHandle(renderGraph, "Panini Projection Destination");
                     passData.destination = builder.WriteTexture(dest);
 
                     builder.SetRenderFunc(
@@ -811,7 +803,7 @@ namespace UnityEngine.Rendering.HighDefinition
             bool isSceneView = hdCamera.camera.cameraType == CameraType.SceneView;
             using (var builder = renderGraph.AddRenderPass<UberPostPassData>("Uber Post", out var passData, ProfilingSampler.Get(HDProfileId.UberPost)))
             {
-                TextureHandle dest = GetPostprocessOutputHandle(source, renderGraph, "Uber Post Destination");
+                TextureHandle dest = GetPostprocessOutputHandle(renderGraph, "Uber Post Destination");
 
                 passData.parameters = PrepareUberPostParameters(hdCamera, isSceneView);
                 passData.source = builder.ReadTexture(source);
@@ -846,7 +838,7 @@ namespace UnityEngine.Rendering.HighDefinition
                 {
                     passData.source = builder.ReadTexture(source);
                     passData.parameters = PrepareFXAAParameters(hdCamera);
-                    TextureHandle dest = GetPostprocessOutputHandle(source, renderGraph, "FXAA Destination");
+                    TextureHandle dest = GetPostprocessOutputHandle(renderGraph, "FXAA Destination");
                     passData.destination = builder.WriteTexture(dest);;
 
                     builder.SetRenderFunc(
