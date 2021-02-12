@@ -3,24 +3,24 @@
 # Introduce any changes under .yamato/config/*.metafile files (for most cases) or under .yamato/ruamel/* within Python (more elaborate cases), and rerun build.py to regenerate all .yml files. 
 # Read more under .yamato/docs/readme.md 
 
-{% metadata_file .yamato/_latest_editor_versions_2021.1.metafile -%}
+{% metadata_file .yamato/_latest_editor_versions_trunk.metafile -%}
 
 ---
 
-PR_ShaderGraph_Stereo_2021.1:
-    name: ShaderGraph_Stereo PR Job - 2021.1
+PR_ShaderGraph_Stereo_trunk:
+    name: ShaderGraph_Stereo PR Job - trunk
     dependencies:
-      -  path: .yamato/shadergraph_stereo-win.yml#ShaderGraph_Stereo_Win_Standalone_cache_mono_Linear_2021.1
+      -  path: .yamato/shadergraph_stereo-win.yml#ShaderGraph_Stereo_Win_Standalone_cache_mono_Linear_trunk
          rerun: on-new-revision
-      -  path: .yamato/shadergraph_stereo-win.yml#ShaderGraph_Stereo_Win_editmode_mono_Linear_2021.1
+      -  path: .yamato/shadergraph_stereo-win.yml#ShaderGraph_Stereo_Win_editmode_mono_Linear_trunk
          rerun: on-new-revision
     variables:
         UTR_VERSION: "current"
         TEST_FILTER: .*
-Nightly_ShaderGraph_Stereo_2021.1:
-    name: Nightly ShaderGraph_Stereo - 2021.1
+Nightly_ShaderGraph_Stereo_trunk:
+    name: Nightly ShaderGraph_Stereo - trunk
     dependencies:
-      -  path: .yamato/all-shadergraph_stereo.yml#PR_ShaderGraph_Stereo_2021.1
+      -  path: .yamato/all-shadergraph_stereo.yml#PR_ShaderGraph_Stereo_trunk
          rerun: on-new-revision
     variables:
         UTR_VERSION: "current"

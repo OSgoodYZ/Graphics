@@ -18,12 +18,12 @@ test_platforms:
   - type: playmode
     name: playmode_XR
     utr_flags:
-      - [all]: --extra-editor-arg="-xr-tests" 
+      - [all]: --extra-editor-arg="-xr-reuse-tests" 
       - [all]: --compilation-errors-as-warnings
   - type: playmode
     name: playmode_XR_cache
     utr_flags:
-    - [all]: --extra-editor-arg="-xr-tests"
+    - [all]: --extra-editor-arg="-xr-reuse-tests"
     - [all]: --extra-editor-arg="-adb2"
     - [all]: --extra-editor-arg="-enableCacheServer"
     - [all]: --extra-editor-arg="-cacheServerEndpoint" --extra-editor-arg="cacheserver-slo.hq.unity3d.com"

@@ -21,14 +21,14 @@ MonoBehaviour:
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: iOS Tracked issue (005)
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: e23c793ace3c4a146a73360af1600fbd, type: 3}
     ColorSpace: -1
     BuildPlatform: 24
     GraphicsDevice: 21
-    XrSdk: 
+    XrSdk: None
     StereoModes: 0
     Reason: https://fogbugz.unity3d.com/f/cases/1305533/
   - FilteredScene: {fileID: 0}
@@ -39,8 +39,7 @@ MonoBehaviour:
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: 'iOS tracked  regression: Lit shader fails has an error on iOS (scene
-      007)'
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: 8d65e7263d49aea4dad06fbbe0b9f438, type: 3}
@@ -49,8 +48,7 @@ MonoBehaviour:
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: 'iOS tracked  regression: Lit shader fails has an error on iOS (scene
-      008)'
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: 8d65e7263d49aea4dad06fbbe0b9f438, type: 3}
@@ -68,7 +66,7 @@ MonoBehaviour:
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: iOS Tracked issue (017)
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: 99da9ba2c3d1f4b1d92f851028bb7d0a, type: 3}
@@ -77,7 +75,7 @@ MonoBehaviour:
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: iOS Tracked issue (023)
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: 2b6b74b7929ae4191b3b936c12236e0a, type: 3}
@@ -95,8 +93,7 @@ MonoBehaviour:
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: 'iOS tracked  regression: Lit shader fails has an error on iOS (scene
-      024)'
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: a770620fcd2f84f248d06edf3744b2c0, type: 3}
@@ -105,8 +102,7 @@ MonoBehaviour:
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: 'iOS tracked  regression: Lit shader fails has an error on iOS (scene
-      025)'
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: bcb8635ea84c143f0ae0823f1e9b6f25, type: 3}
@@ -115,8 +111,7 @@ MonoBehaviour:
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: 'iOS tracked  regression: Lit shader fails has an error on iOS (scene
-      026)'
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: bcb8635ea84c143f0ae0823f1e9b6f25, type: 3}
@@ -134,8 +129,7 @@ MonoBehaviour:
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: 'iOS tracked  regression: Lit shader fails has an error on iOS (scene
-      031)'
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: 375d3d0d24cdfe14aa69d3d595acb1c3, type: 3}
@@ -144,8 +138,7 @@ MonoBehaviour:
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: 'iOS tracked  regression: Lit shader fails has an error on iOS (scene
-      032)'
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: ff592545ad5dd744893d54a73f85b2cc, type: 3}
@@ -154,8 +147,7 @@ MonoBehaviour:
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: 'iOS tracked  regression: Lit shader fails has an error on iOS (scene
-      033)'
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: e346f8573410f414ea2a8a4740526c88, type: 3}
@@ -164,8 +156,7 @@ MonoBehaviour:
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: 'iOS tracked  regression: Lit shader fails has an error on iOS (scene
-      034)'
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: 770b86964e87d47e4bdbafa425ccd238, type: 3}
@@ -179,11 +170,29 @@ MonoBehaviour:
     FilteredScenes:
     - {fileID: 102900000, guid: 770b86964e87d47e4bdbafa425ccd238, type: 3}
     ColorSpace: -1
+    BuildPlatform: 5
+    GraphicsDevice: 18
+    XrSdk: None
+    StereoModes: 0
+    Reason: https://fogbugz.unity3d.com/f/cases/1304675
+  - FilteredScene: {fileID: 0}
+    FilteredScenes:
+    - {fileID: 102900000, guid: 770b86964e87d47e4bdbafa425ccd238, type: 3}
+    ColorSpace: -1
+    BuildPlatform: 5
+    GraphicsDevice: 21
+    XrSdk: None
+    StereoModes: 0
+    Reason: https://fogbugz.unity3d.com/f/cases/1304675
+  - FilteredScene: {fileID: 0}
+    FilteredScenes:
+    - {fileID: 102900000, guid: 770b86964e87d47e4bdbafa425ccd238, type: 3}
+    ColorSpace: -1
     BuildPlatform: 9
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: 'iOS crashes (scene 035; Bug ID: 1280307)'
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: 770b86964e87d47e4bdbafa425ccd238, type: 3}
@@ -192,7 +201,34 @@ MonoBehaviour:
     GraphicsDevice: 11
     XrSdk: None
     StereoModes: 0
-    Reason: 'Android Out of memory crash (FB: 1304672)'
+    Reason: https://fogbugz.unity3d.com/f/cases/1304675
+  - FilteredScene: {fileID: 0}
+    FilteredScenes:
+    - {fileID: 102900000, guid: 770b86964e87d47e4bdbafa425ccd238, type: 3}
+    ColorSpace: -1
+    BuildPlatform: 13
+    GraphicsDevice: 21
+    XrSdk: None
+    StereoModes: 0
+    Reason: https://fogbugz.unity3d.com/f/cases/1304675
+  - FilteredScene: {fileID: 0}
+    FilteredScenes:
+    - {fileID: 102900000, guid: 770b86964e87d47e4bdbafa425ccd238, type: 3}
+    ColorSpace: -1
+    BuildPlatform: 19
+    GraphicsDevice: 2
+    XrSdk: None
+    StereoModes: 0
+    Reason: https://fogbugz.unity3d.com/f/cases/1304675
+  - FilteredScene: {fileID: 0}
+    FilteredScenes:
+    - {fileID: 102900000, guid: 770b86964e87d47e4bdbafa425ccd238, type: 3}
+    ColorSpace: -1
+    BuildPlatform: 19
+    GraphicsDevice: 18
+    XrSdk: 
+    StereoModes: 0
+    Reason: https://fogbugz.unity3d.com/f/cases/1304675
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: 770b86964e87d47e4bdbafa425ccd238, type: 3}
@@ -208,7 +244,7 @@ MonoBehaviour:
     ColorSpace: -1
     BuildPlatform: 24
     GraphicsDevice: 21
-    XrSdk: 
+    XrSdk: None
     StereoModes: 0
     Reason: https://fogbugz.unity3d.com/f/cases/1304675
   - FilteredScene: {fileID: 0}
@@ -217,6 +253,24 @@ MonoBehaviour:
     ColorSpace: -1
     BuildPlatform: 31
     GraphicsDevice: 13
+    XrSdk: 
+    StereoModes: 0
+    Reason: https://fogbugz.unity3d.com/f/cases/1304675
+  - FilteredScene: {fileID: 0}
+    FilteredScenes:
+    - {fileID: 102900000, guid: 770b86964e87d47e4bdbafa425ccd238, type: 3}
+    ColorSpace: -1
+    BuildPlatform: 33
+    GraphicsDevice: 14
+    XrSdk: 
+    StereoModes: 0
+    Reason: https://fogbugz.unity3d.com/f/cases/1304675
+  - FilteredScene: {fileID: 0}
+    FilteredScenes:
+    - {fileID: 102900000, guid: 770b86964e87d47e4bdbafa425ccd238, type: 3}
+    ColorSpace: -1
+    BuildPlatform: 33
+    GraphicsDevice: 23
     XrSdk: 
     StereoModes: 0
     Reason: https://fogbugz.unity3d.com/f/cases/1304675
@@ -237,7 +291,7 @@ MonoBehaviour:
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: iOS Tracked issue (036)
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: 5578c9d8b0329024d8020e3094f70302, type: 3}
@@ -255,8 +309,7 @@ MonoBehaviour:
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: 'iOS tracked  regression: Lit shader fails has an error on iOS (scene
-      038)'
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: 5578c9d8b0329024d8020e3094f70302, type: 3}
@@ -266,15 +319,6 @@ MonoBehaviour:
     XrSdk: 
     StereoModes: 0
     Reason: https://fogbugz.unity3d.com/f/cases/1305591/
-  - FilteredScene: {fileID: 0}
-    FilteredScenes:
-    - {fileID: 102900000, guid: 5fca56b2f8a46664e858cbb290338fc8, type: 3}
-    ColorSpace: -1
-    BuildPlatform: 9
-    GraphicsDevice: 16
-    XrSdk: None
-    StereoModes: 0
-    Reason: iOS 039 new faulty test scene
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: 5fca56b2f8a46664e858cbb290338fc8, type: 3}
@@ -292,7 +336,7 @@ MonoBehaviour:
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: iOS Tracked issue (041)
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: 362b9a0c21a9b4e798504044c7604e80, type: 3}
@@ -301,7 +345,7 @@ MonoBehaviour:
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: iOS Tracked issue  (055)
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: 381306730e4f1b141bf8e0e1c35f16e9, type: 3}
@@ -313,22 +357,13 @@ MonoBehaviour:
     Reason: iOS failure on scene
   - FilteredScene: {fileID: 0}
     FilteredScenes:
-    - {fileID: 102900000, guid: 4f7a50da47cfeca46b45fe14be17081d, type: 3}
-    ColorSpace: -1
-    BuildPlatform: 2
-    GraphicsDevice: 16
-    XrSdk: 
-    StereoModes: 0
-    Reason: https://fogbugz.unity3d.com/f/cases/1309400/
-  - FilteredScene: {fileID: 0}
-    FilteredScenes:
     - {fileID: 102900000, guid: 9f750aafa54d07a43b7601615bb2c7ea, type: 3}
     ColorSpace: -1
     BuildPlatform: 9
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: iOS Tracked issue (059)
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: 9f750aafa54d07a43b7601615bb2c7ea, type: 3}
@@ -401,8 +436,7 @@ MonoBehaviour:
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: 'iOS tracked  regression: Lit shader fails has an error on iOS (scene
-      103)'
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: 25cb76fbf82e5924f817e3466acb803a, type: 3}
@@ -420,8 +454,7 @@ MonoBehaviour:
     GraphicsDevice: 16
     XrSdk: None
     StereoModes: 0
-    Reason: 'iOS tracked  regression: Lit shader fails has an error on iOS (scene
-      104)'
+    Reason: 'Filtered out due to OoM issue (FB: 1304672)'
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: 6d72a4ab29e211149914e8a46ba9d1cf, type: 3}
@@ -444,18 +477,9 @@ MonoBehaviour:
     FilteredScenes:
     - {fileID: 102900000, guid: 83adeebeb3ba74a13816f2b8636588aa, type: 3}
     ColorSpace: -1
-    BuildPlatform: 9
-    GraphicsDevice: 16
-    XrSdk: None
-    StereoModes: 0
-    Reason: iOS tracked regression (scene 111 - 1256906)
-  - FilteredScene: {fileID: 0}
-    FilteredScenes:
-    - {fileID: 102900000, guid: 83adeebeb3ba74a13816f2b8636588aa, type: 3}
-    ColorSpace: -1
     BuildPlatform: 24
     GraphicsDevice: 21
-    XrSdk: 
+    XrSdk: None
     StereoModes: 0
     Reason: https://fogbugz.unity3d.com/f/cases/1305639/
   - FilteredScene: {fileID: 0}
@@ -479,12 +503,36 @@ MonoBehaviour:
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: c7b61419ee9382545afe530714fda0c2, type: 3}
+    - {fileID: 102900000, guid: 40c4ce99a7711204d978b31395d890b4, type: 3}
+    - {fileID: 102900000, guid: 74cb351d2fc32de4d812e3f2f08744e7, type: 3}
+    - {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
+    ColorSpace: -1
+    BuildPlatform: 13
+    GraphicsDevice: 11
+    XrSdk: 
+    StereoModes: 0
+    Reason: https://fogbugz.unity3d.com/f/cases/1313236/
+  - FilteredScene: {fileID: 0}
+    FilteredScenes:
+    - {fileID: 102900000, guid: c7b61419ee9382545afe530714fda0c2, type: 3}
     ColorSpace: -1
     BuildPlatform: 13
     GraphicsDevice: 21
     XrSdk: None
     StereoModes: 0
     Reason: 'Android Vulkan 119: tracked issue (1252270)'
+  - FilteredScene: {fileID: 0}
+    FilteredScenes:
+    - {fileID: 102900000, guid: c7b61419ee9382545afe530714fda0c2, type: 3}
+    - {fileID: 102900000, guid: 40c4ce99a7711204d978b31395d890b4, type: 3}
+    - {fileID: 102900000, guid: 74cb351d2fc32de4d812e3f2f08744e7, type: 3}
+    - {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
+    ColorSpace: -1
+    BuildPlatform: 13
+    GraphicsDevice: 21
+    XrSdk: 
+    StereoModes: 0
+    Reason: https://fogbugz.unity3d.com/f/cases/1313236/
   - FilteredScene: {fileID: 0}
     FilteredScenes:
     - {fileID: 102900000, guid: c7b61419ee9382545afe530714fda0c2, type: 3}
@@ -613,15 +661,6 @@ MonoBehaviour:
     Reason: Needs fixing in OpenGL
   - FilteredScene: {fileID: 0}
     FilteredScenes:
-    - {fileID: 102900000, guid: ac4701d765fa26b4f83d2fb9ed6b3c08, type: 3}
-    ColorSpace: -1
-    BuildPlatform: 9
-    GraphicsDevice: 16
-    XrSdk: None
-    StereoModes: 0
-    Reason: 'iOS failure on scene 131 (fogbugz: 1283292)'
-  - FilteredScene: {fileID: 0}
-    FilteredScenes:
     - {fileID: 102900000, guid: 0ad4d46f32f2cc942b4592c2f4368b83, type: 3}
     ColorSpace: -1
     BuildPlatform: 24
@@ -671,6 +710,6 @@ MonoBehaviour:
     ColorSpace: -1
     BuildPlatform: 24
     GraphicsDevice: 21
-    XrSdk: 
+    XrSdk: None
     StereoModes: 0
     Reason: https://fogbugz.unity3d.com/f/cases/1305639/
