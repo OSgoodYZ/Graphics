@@ -200,6 +200,7 @@ namespace UnityEngine.Rendering.HighDefinition
         FXAA,
         SMAA,
         SceneUpsampling,
+        SetResolutionGroup,
         FinalPost,
         FinalImageHistogram,
         CustomPostProcessBeforeTAA,

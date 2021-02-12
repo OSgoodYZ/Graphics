@@ -298,10 +298,15 @@ float GetIndirectSpecularMultiplier(uint renderingLayers)
 
 // Functions to clamp UVs to use when RTHandle system is used.
 
-float2 ClampAndScaleUV(float2 UV, float2 texelSize, float numberOfTexels)
+float2 ClampAndScaleUV(float2 UV, float2 texelSize, float numberOfTexels, float2 multiplier)
 {
     float2 maxCoord = 1.0f - numberOfTexels * texelSize;
-    return min(UV, maxCoord) * _RTHandleScale.xy;
+    return min(UV, maxCoord) * multiplier;
+}
+
+float2 ClampAndScaleUV(float2 UV, float2 texelSize, float numberOfTexels)
+{
+    return ClampAndScaleUV(UV, texelSize, numberOfTexels, _RTHandleScale.xy);
 }
 
 // This is assuming half a texel offset in the clamp.
@@ -314,6 +319,17 @@ float2 ClampAndScaleUVForBilinear(float2 UV, float2 texelSize)
 float2 ClampAndScaleUVForBilinear(float2 UV)
 {
     return ClampAndScaleUV(UV, _ScreenSize.zw, 0.5f);
+}
+
+// This is assuming full screen buffer and .
+float2 ClampAndScaleUVForBilinearPostProcessTexture(float2 UV)
+{
+    return ClampAndScaleUV(UV, _ScreenSize.zw, 0.5f, _RTHandlePostProcessScale.xy);
+}
+
+float2 PostProcessTexelSize()
+{
+    return _RTHandlePostProcessScale.zw;
 }
 
 float2 ClampAndScaleUVForPoint(float2 UV)

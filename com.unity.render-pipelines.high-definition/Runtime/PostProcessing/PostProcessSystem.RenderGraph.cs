@@ -177,7 +177,7 @@ namespace UnityEngine.Rendering.HighDefinition
             public Textures outputTextures = new Textures();
         }
 
-        TextureHandle GetPostprocessOutputHandle(RenderGraph renderGraph,  string name, bool dynamicResolution = true)
+        TextureHandle GetPostprocessOutputHandle(RenderGraph renderGraph,  string name, bool dynamicResolution)
         {
             return renderGraph.CreateTexture(new TextureDesc(Vector2.one, dynamicResolution, true)
             {
@@ -186,6 +186,11 @@ namespace UnityEngine.Rendering.HighDefinition
                 useMipMap = false,
                 enableRandomWrite = true
             });
+        }
+
+        TextureHandle GetPostprocessOutputHandle(RenderGraph renderGraph,  string name)
+        {
+            return GetPostprocessOutputHandle(renderGraph, name, ResGroup == ResolutionGroup.Downsampled);
         }
 
         TextureHandle GetPostprocessUpsampledOutputHandle(RenderGraph renderGraph, string name)
@@ -948,6 +953,16 @@ namespace UnityEngine.Rendering.HighDefinition
             return outTextures;
         }
 
+        internal void UpdateResolutionGroup(RenderGraph renderGraph, HDCamera camera, ResolutionGroup newResGroup)
+        {
+            if (ResGroup == newResGroup)
+                return;
+    
+            ResGroup = newResGroup;
+            m_HDInstance.UpdatePostProcessScreenSize(renderGraph, camera, Viewport.x, Viewport.y);
+        }
+
+
         void FinalPass(RenderGraph renderGraph, HDCamera hdCamera, TextureHandle afterPostProcessTexture, TextureHandle alphaTexture, TextureHandle finalRT, TextureHandle source, BlueNoise blueNoise, bool flipY)
         {
             using (var builder = renderGraph.AddRenderPass<FinalPassData>("Final Pass", out var passData, ProfilingSampler.Get(HDProfileId.FinalPost)))
@@ -1066,6 +1081,10 @@ namespace UnityEngine.Rendering.HighDefinition
 
             var source = colorBuffer;
             TextureHandle alphaTexture = DoCopyAlpha(renderGraph, hdCamera, source);
+    
+            //default always to downsampled resolution group.
+            //when DRS is off this resolution group is the same.
+            UpdateResolutionGroup(renderGraph, hdCamera, ResolutionGroup.Downsampled);
 
             // Note: whether a pass is really executed or not is generally inside the Do* functions.
             // with few exceptions.
@@ -1076,14 +1095,14 @@ namespace UnityEngine.Rendering.HighDefinition
 
                 source = DynamicExposurePass(renderGraph, hdCamera, source);
 
-
-                if (DynamicResolutionHandler.instance.schedulePolicy == DynamicResSchedulePolicy.BeforePost
+                if (UpsamplerSchedule == UpsamplerScheduleType.BeforePost
                     && DynamicResolutionHandler.instance.DynamicResolutionEnabled())
                 {
                     var upsamplignSceneResults = SceneUpsamplePass(renderGraph, hdCamera, source, depthBuffer, motionVectors);
                     source = upsamplignSceneResults.color;
                     depthBuffer = upsamplignSceneResults.depthBuffer;
                     motionVectors = upsamplignSceneResults.motionVectors;
+                    UpdateResolutionGroup(renderGraph, hdCamera, ResolutionGroup.Full);
                 }
 
                 source = CustomPostProcessPass(renderGraph, hdCamera, source, depthBuffer, normalBuffer, HDRenderPipeline.defaultAsset.beforeTAACustomPostProcesses, HDProfileId.CustomPostProcessBeforeTAA);
@@ -1128,9 +1147,10 @@ namespace UnityEngine.Rendering.HighDefinition
             }
 
             // Contrast Adaptive Sharpen Upscaling, which only works after post effects
-            if (DynamicResolutionHandler.instance.schedulePolicy == DynamicResSchedulePolicy.AfterPost)
+            if (UpsamplerSchedule == UpsamplerScheduleType.AfterPost)
             {
                 source = ContrastAdaptiveSharpeningPass(renderGraph, hdCamera, source);
+                UpdateResolutionGroup(renderGraph, hdCamera, ResolutionGroup.Full);
             }
 
             FinalPass(renderGraph, hdCamera, afterPostProcessTexture, alphaTexture, finalRT, source, blueNoise, flipY);

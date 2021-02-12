@@ -16,9 +16,6 @@ float4 _ViewPortSize;
 [numthreads(8,4,1)]
 void MainUpsample (uint3 dti : SV_DispatchThreadID)
 {
-    if (any(dti.xy >= _ViewPortSize.xy))
-        return;
-
     UNITY_XR_ASSIGN_VIEW_INDEX(dti.z);
 
     float2 uvs = ((float2)dti.xy + 0.5f) * _ViewPortSize.zw;
