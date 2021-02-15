@@ -118,9 +118,12 @@ namespace UnityEditor.Rendering
         /// </summary>
         public SerializedProperty activeProperty { get; internal set; }
 
-        EditorPrefBool m_ShowAdditionalProperties;
+        #region Additional Properties
 
+        AnimFloat             m_AdditionalPropertiesAnimation;
+        EditorPrefBool        m_ShowAdditionalProperties;
         List<VolumeParameter> m_VolumeNotAdditionalParameters;
+
         /// <summary>
         /// Override this property if your editor makes use of the "Additional Properties" feature.
         /// </summary>
@@ -129,7 +132,6 @@ namespace UnityEditor.Rendering
         /// <summary>
         /// Set to true to show additional properties.
         /// </summary>
-
         public bool showAdditionalProperties
         {
             get => m_ShowAdditionalProperties.value;
@@ -157,8 +159,7 @@ namespace UnityEditor.Rendering
                 CoreEditorUtils.EndAdditionalPropertiesHighlight();
             }
         }
-
-        AnimFloat m_AdditionalPropertiesAnimation;
+        #endregion
 
         /// <summary>
         /// A reference to the parent editor in the Inspector.
@@ -286,20 +287,20 @@ namespace UnityEditor.Rendering
 
             m_Parameters = fields
                 .Select(t =>
+            {
+                var name = "";
+                var order = 0;
+                var(fieldInfo, serializedProperty) = t;
+                var attr = (DisplayInfoAttribute[])fieldInfo.GetCustomAttributes(typeof(DisplayInfoAttribute), true);
+                if (attr.Length != 0)
                 {
-                    var name = "";
-                    var order = 0;
-                    var (fieldInfo, serializedProperty) = t;
-                    var attr = (DisplayInfoAttribute[])fieldInfo.GetCustomAttributes(typeof(DisplayInfoAttribute), true);
-                    if (attr.Length != 0)
-                    {
-                        name = attr[0].name;
-                        order = attr[0].order;
-                    }
+                    name = attr[0].name;
+                    order = attr[0].order;
+                }
 
-                    var parameter = new SerializedDataParameter(serializedProperty);
-                    return (new GUIContent(name), order, parameter);
-                })
+                var parameter = new SerializedDataParameter(serializedProperty);
+                return (new GUIContent(name), order, parameter);
+            })
                 .OrderBy(t => t.order)
                 .ToList();
         }
@@ -324,7 +325,7 @@ namespace UnityEditor.Rendering
         }
 
         /// <summary>
-        /// Unity calls this method everytime it re-draws the Inspector.
+        /// Unity calls this method each time it re-draws the Inspector.
         /// </summary>
         /// <remarks>
         /// You can safely override this method and not call <c>base.OnInspectorGUI()</c> unless you
@@ -444,12 +445,6 @@ namespace UnityEditor.Rendering
             return PropertyField(property, title);
         }
 
-        protected void DrawHeader(string title)
-        {
-            var rect = EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight));
-            EditorGUI.LabelField(rect, title, EditorStyles.miniLabel);
-        }
-
         /// <summary>
         /// Handles unity built-in decorators (Space, Header, Tooltips, ...) from <see cref="SerializedDataParameter"/> attributes
         /// </summary>
@@ -468,14 +463,17 @@ namespace UnityEditor.Rendering
                         EditorGUILayout.GetControlRect(false, spaceAttribute.height);
                         break;
                     case HeaderAttribute headerAttribute:
-                        DrawHeader(headerAttribute.header);
+                    {
+                        var rect = EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight));
+                        EditorGUI.LabelField(rect, title, EditorStyles.miniLabel);
                         break;
+                    }
                     case TooltipAttribute tooltipAttribute:
-                        {
-                            if (string.IsNullOrEmpty(title.tooltip))
-                                title.tooltip = tooltipAttribute.tooltip;
-                            break;
-                        }
+                    {
+                        if (string.IsNullOrEmpty(title.tooltip))
+                            title.tooltip = tooltipAttribute.tooltip;
+                        break;
+                    }
                     case InspectorNameAttribute inspectorNameAttribute:
                         title.text = inspectorNameAttribute.displayName;
                         break;
@@ -495,13 +493,16 @@ namespace UnityEditor.Rendering
             bool draw = false;
             if (property.GetAttribute<AdditionalPropertyAttribute>() == null)
             {
+                // If the property doesn't have the attribute, we know that it will be drawn
                 DrawPropertyField(property, title);
                 draw = true;
             }
             else
             {
+                // The property is additional, check if the user had selected that 'Show additional Properties'
                 if (hasAdditionalProperties && showAdditionalProperties)
                 {
+                    // Handle the highlight, and draw the property
                     using (new AdditionalPropertiesScope(m_AdditionalPropertiesAnimation))
                     {
                         DrawPropertyField(property, title);
@@ -510,6 +511,7 @@ namespace UnityEditor.Rendering
                 }
             }
 
+            // Finally, if the property has been drawn return this information, to check for additional controls for this property
             return draw;
         }
 
